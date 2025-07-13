@@ -51,4 +51,5 @@ tmp/
 .env
 
 # Built application
-*.app/
+*.app/Claude.md
+CLAUDE.md

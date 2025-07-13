@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- App Sandbox: ENABLED for Mac App Store distribution -->
+    <!-- This provides security isolation and access control -->
+    <key>com.apple.security.app-sandbox</key>
+    <true/>
+    
+    <!-- Network Access: Required for mounting network drives -->
+    <!-- Allows AFP, SMB, and NFS protocol connections -->
+    <key>com.apple.security.network.client</key>
+    <true/>
+    
+    <!-- File Access: User-selected read/write for mount points -->
+    <!-- Users must explicitly grant access to mount point directories -->
+    <!-- This is handled through NSOpenPanel and security-scoped bookmarks -->
+    <key>com.apple.security.files.user-selected.read-write</key>
+    <true/>
+    
+    <!-- Temporary Exception: Files in /Volumes -->
+    <!-- Required for checking mount status of network drives -->
+    <!-- This is a read-only exception for mount detection -->
+    <key>com.apple.security.temporary-exception.files.absolute-path.read-only</key>
+    <array>
+        <string>/Volumes/</string>
+    </array>
+    
+    <!-- Keychain Access: For secure credential storage -->
+    <!-- Credentials are stored in the app's private keychain group -->
+    <key>keychain-access-groups</key>
+    <array>
+        <string>$(AppIdentifierPrefix)com.example.networkdrivemapper</string>
+    </array>
+    
+    <!-- Security Scoped Bookmarks: For persistent mount point access -->
+    <!-- Required to maintain access to user-selected directories across launches -->
+    <key>com.apple.security.files.bookmarks.app-scope</key>
+    <true/>
+    
+    <!-- Network Extension: For VPN monitoring -->
+    <!-- Required to detect VPN state changes for conditional mounting -->
+    <key>com.apple.developer.networking.networkextension</key>
+    <array>
+        <string>provider-observer</string>
+    </array>
+    
+    <!-- Process Info: For system monitoring -->
+    <!-- Used to detect system sleep/wake events -->
+    <key>com.apple.security.temporary-exception.mach-lookup.global-name</key>
+    <array>
+        <string>com.apple.SystemConfiguration.configd</string>
+    </array>
+    
+    <!-- Additional Hardened Runtime Requirements -->
+    <!-- These may be needed for notarization but are separate from entitlements -->
+    <!-- Configure these in the project's Hardened Runtime settings:
+         - Allow Unsigned Executable Memory: NO
+         - Allow DYLD Environment Variables: NO
+         - Disable Library Validation: NO (unless using third-party frameworks)
+         - Allow Execution of JIT-compiled Code: NO
+         - Debugging Tool: NO (for release builds)
+    -->
+</dict>
+</plist>

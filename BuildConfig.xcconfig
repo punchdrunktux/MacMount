@@ -1,0 +1,95 @@
+// BuildConfig.xcconfig
+// Build configuration for MacMount
+// Updated for sandboxed Mac App Store distribution
+
+// Product Configuration
+PRODUCT_NAME = MacMount
+PRODUCT_BUNDLE_IDENTIFIER = com.macmount.app
+MACOSX_DEPLOYMENT_TARGET = 12.0
+SWIFT_VERSION = 5.9
+
+// Code Signing Configuration
+// ===========================
+// Development signing (default - uses ad-hoc signing)
+// Set SIGNING_MODE=development for local builds
+// Set SIGNING_MODE=distribution for release builds
+
+// Team and Identity Configuration
+// Set these via environment variables or replace with actual values:
+// DEVELOPMENT_TEAM_ID: Your 10-character Apple Developer Team ID
+// CODE_SIGN_IDENTITY_DEV: "Apple Development" or specific certificate
+// CODE_SIGN_IDENTITY_DIST: "Developer ID Application: Your Name (TEAMID)"
+
+#include? "BuildConfig.local.xcconfig"
+
+// Default to development mode if not specified
+SIGNING_MODE = $(inherited:default=development)
+
+// Development Team (required for all signing except ad-hoc)
+// Override with: export DEVELOPMENT_TEAM_ID=XXXXXXXXXX
+DEVELOPMENT_TEAM = $(DEVELOPMENT_TEAM_ID:default=)
+
+// Code Signing Style
+// Automatic for development, Manual for distribution
+CODE_SIGN_STYLE[config=Debug] = Automatic
+CODE_SIGN_STYLE[config=Release] = Manual
+
+// Code Signing Identity
+// Development: "-" for ad-hoc, "Apple Development" for dev cert
+// Distribution: "Developer ID Application" for notarization
+CODE_SIGN_IDENTITY[sdk=*][config=Debug] = $(CODE_SIGN_IDENTITY_DEV:default=-)
+CODE_SIGN_IDENTITY[sdk=*][config=Release] = $(CODE_SIGN_IDENTITY_DIST:default=Developer ID Application)
+
+// Provisioning Profile
+// Only needed for Mac App Store distribution
+PROVISIONING_PROFILE_SPECIFIER[config=Debug] = 
+PROVISIONING_PROFILE_SPECIFIER[config=Release] = $(PROVISIONING_PROFILE_DIST:default=)
+
+// Paths
+INFOPLIST_FILE = Info.plist
+CODE_SIGN_ENTITLEMENTS = MacMount.entitlements
+
+// Hardened Runtime - Required for notarization
+ENABLE_HARDENED_RUNTIME = YES
+
+// Code Signing Flags
+// --timestamp: Required for notarization (uses Apple's timestamp server)
+// --options runtime: Enables hardened runtime
+// --deep: Signs all nested code (frameworks, bundles, etc.)
+OTHER_CODE_SIGN_FLAGS = --timestamp --options runtime --deep
+
+// Notarization flags (used by build scripts)
+// Set via environment: export NOTARIZE_APPLE_ID=your@email.com
+// Set via environment: export NOTARIZE_TEAM_ID=XXXXXXXXXX
+// Set via environment: export NOTARIZE_PASSWORD=xxxx-xxxx-xxxx-xxxx (app-specific password)
+NOTARIZE_FLAGS = --apple-id $(NOTARIZE_APPLE_ID:default=) --team-id $(NOTARIZE_TEAM_ID:default=) --password $(NOTARIZE_PASSWORD:default=)
+
+// App Sandbox - Now enabled for Mac App Store
+ENABLE_APP_SANDBOX = YES
+
+// Strip debug symbols for release builds
+STRIP_INSTALLED_PRODUCT = YES
+STRIP_STYLE = all
+
+// Optimization
+SWIFT_OPTIMIZATION_LEVEL = -O
+GCC_OPTIMIZATION_LEVEL = s
+
+// Architecture - Universal binary for Apple Silicon and Intel
+ARCHS = $(ARCHS_STANDARD)
+ONLY_ACTIVE_ARCH = NO
+
+// Deployment Post-Processing
+DEPLOYMENT_POSTPROCESSING = YES
+SEPARATE_STRIP = YES
+
+// Documentation
+// To prepare for Mac App Store submission:
+// 1. Replace YOUR_TEAM_ID with your actual Apple Developer Team ID
+// 2. Ensure you have a valid Mac Developer certificate in Keychain
+// 3. Create an App ID on developer.apple.com with these capabilities:
+//    - App Sandbox
+//    - Network Client
+//    - User Selected Files (Read/Write)
+// 4. Generate a provisioning profile for Mac App Store distribution
+// 5. Test thoroughly in sandboxed environment before submission

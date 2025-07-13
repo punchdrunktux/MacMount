@@ -29,65 +29,6 @@ A native macOS menu bar application that automatically mounts and manages networ
 
 The app will automatically start at login after first launch.
 
-## Usage
-
-### Adding a Network Drive
-
-1. Click the MacMount icon in your menu bar
-2. Select "Preferences..."
-3. Click the "+" button to add a new server
-4. Fill in the server details:
-   - Protocol (SMB, AFP, or NFS)
-   - Server address
-   - Share name
-   - Username and password (optional)
-   - Mount options
-5. Click "Save"
-
-### Managing Drives
-
-- **Mount/Unmount**: Click the menu bar icon and select a drive to toggle
-- **Edit Configuration**: Open Preferences and double-click a server
-- **Remove Server**: Select a server in Preferences and click "-"
-
-### Advanced Options
-
-- **Requires VPN**: Only mount when specific VPN is connected
-- **Hidden Mount**: Hide drive from Finder sidebar
-- **Read Only**: Mount drive in read-only mode
-- **Retry Strategy**: Configure how aggressively to retry failed mounts
-
-## Security
-
-MacMount takes security seriously:
-
-- Credentials are stored in the macOS Keychain with hardware encryption
-- No passwords are stored in plain text
-- App is code-signed and notarized by Apple
-- Minimal permissions required (no sandboxing to allow mount operations)
-
-## Troubleshooting
-
-### Drive Won't Mount
-
-1. Verify server is accessible: `ping server-address`
-2. Check credentials are correct
-3. Ensure share name is spelled correctly
-4. Check firewall settings
-
-### App Won't Start at Login
-
-1. Open System Settings > General > Login Items
-2. Add MacMount to the list
-3. Ensure it's enabled
-
-### Collecting Diagnostics
-
-1. Click the menu bar icon
-2. Hold Option and click "About"
-3. Click "Export Diagnostics..."
-4. Share the generated file for support
-
 ## Building from Source
 
 ### Prerequisites
@@ -126,22 +67,6 @@ MacMount uses a modern Swift architecture:
 - **Network.framework** for network monitoring
 - **Security.framework** for Keychain integration
 
-## Contributing
-
-Contributions are welcome! Please read our contributing guidelines before submitting PRs.
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- Thanks to the macOS developer community
-- Icon designed by [Designer Name]
-- Inspired by the need for better network drive management on macOS
